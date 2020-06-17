@@ -7,6 +7,10 @@
   <title>TicTacToe</title>
 
   <style>
+    .btn-content {
+      margin: 10px 0;
+    }
+
     #board {
       display: inline-block;
       border: 1px solid #ccc;
@@ -29,11 +33,13 @@
 </head>
 
 <body>
+
+  <div class="btn-content">
+    <button id="reset">重置</button>
+    <button id="tip">提示</button>
+  </div>
+
   <div id="board"></div>
-
-  <button id="reset">重置</button>
-  <button id="tip">提示</button>
-
 
   <script src="ticTacToe.js"></script>
 

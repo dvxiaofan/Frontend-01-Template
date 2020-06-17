@@ -14,16 +14,19 @@ reset.addEventListener('click', () => {
 
 tip.addEventListener('click', () => {
 	let choice = bestChoice(pattern, key);
-	if (choice.point) pattern[choice.point[1]][choice.point[0]] = key;
+	if (choice.point) {
+		pattern[choice.point[1]][choice.point[0]] = key;
+	}
 	if (check(pattern, key)) {
 		alert(alertText[key]);
 		isOver = true;
 	}
 	key = length - key;
+
 	show();
 	computerMove();
-	console.log(bestChoice(pattern, key).point);
 
+	console.log(bestChoice(pattern, key).point);
 	if (willWin(pattern, key)) console.log(willText[key]);
 });
 
@@ -33,20 +36,22 @@ let pattern = [
 	[0, 0, 0],
 ];
 
-let value = ['', '0', 'X'];
-let alertText = ['', '0 is winner!', 'X is winner!'];
-let willText = ['', '0 will win!', 'X will win!'];
+let value = ['', 'O', 'X'];
+let alertText = ['', 'O is winner!', 'X is winner!'];
+let willText = ['', 'O will win!', 'X will win!'];
 let key = 1;
 let length = value.length;
 let isOver = false;
 
-// 绘制棋盘
+show();
+
+// 绘制棋谱
 function show() {
 	let board = document.getElementById('board');
 	board.innerHTML = '';
-
-	for (let x = 0; x < length; x++) {
-		for (let y = 0; y < length; y++) {
+	board.innerHTML = '';
+	for (let y = 0; y < length; y++) {
+		for (let x = 0; x < length; x++) {
 			let cell = document.createElement('div');
 			cell.classList.add('cell');
 			cell.innerHTML = value[pattern[y][x]];
@@ -60,29 +65,29 @@ function show() {
 	}
 }
 
-show();
-
-// 点击下子
+// 点击落子
 function move(x, y) {
 	if (pattern[y][x]) return;
-	parent[y][x] = key;
+	pattern[y][x] = key;
 	if (check(pattern, key)) {
 		alert(alertText[key]);
 		isOver = true;
 	}
 	key = length - key;
+
 	show();
 	computerMove();
-	console.log(bestChoice(pattern, key).point);
 
+	console.log(bestChoice(pattern, key).point);
 	if (willWin(pattern, key)) console.log(willText[key]);
 }
 
 // 机器落子
 function computerMove() {
 	let choice = bestChoice(pattern, key);
-	if (choice.point) pattern[choice.point[1]][choice.point[0]] = key;
-
+	if (choice.point) {
+		pattern[choice.point[1]][choice.point[0]] = key;
+	}
 	if (check(pattern, key)) {
 		alert(alertText[key]);
 		isOver = true;
@@ -90,10 +95,9 @@ function computerMove() {
 	key = length - key;
 	show();
 }
-
-// 判断是否胜利
+// 检查是否胜利
 function check(pattern, key) {
-	// 横方向检查
+	// 横向检查
 	for (let y = 0; y < length; y++) {
 		let win = true;
 		for (let x = 0; x < length; x++) {
@@ -105,7 +109,7 @@ function check(pattern, key) {
 		if (win) return win;
 	}
 
-	// 纵方向检查
+	// 纵向检查
 	for (let y = 0; y < length; y++) {
 		let win = true;
 		for (let x = 0; x < length; x++) {
@@ -117,7 +121,7 @@ function check(pattern, key) {
 		if (win) return win;
 	}
 
-	// 对角线检查, 左上对右下
+	// 左上至右下，对角检查
 	{
 		let win = true;
 		for (let i = 0; i < length; i++) {
@@ -129,7 +133,7 @@ function check(pattern, key) {
 		if (win) return win;
 	}
 
-	// 对角线, 左下对右上
+	// 左下至右上，对角检查
 	{
 		let win = true;
 		for (let i = 0; i < length; i++) {
@@ -151,35 +155,39 @@ function willWin(pattern, key) {
 	for (let y = 0; y < length; y++) {
 		for (let x = 0; x < length; x++) {
 			if (pattern[y][x]) continue;
-			let temp = clone(pattern);
-			temp[y][x] = key;
-			if (check(temp, key)) return [x, y];
+			let tmp = clone(pattern);
+			tmp[y][x] = key;
+			if (check(tmp, key)) return [x, y];
 		}
 	}
 	return null;
 }
 
-// 最佳落子点, 并返回结果
+// 最佳落子点，并返回结果
 function bestChoice(pattern, key) {
 	let point = willWin(pattern, key);
 	if (point) {
-		return { point, result: 1 };
+		return {
+			point,
+			result: 1,
+		};
 	}
 
 	let result = -1;
 	for (let y = 0; y < length; y++) {
 		for (let x = 0; x < length; x++) {
 			if (pattern[y][x]) continue;
-			let temp = clone(pattern);
-			temp[y][x] = key;
-			let opp = bestChoice(temp, length - key);
+			let tmp = clone(pattern);
+			tmp[y][x] = key;
+			let opp = bestChoice(tmp, length - key);
 
 			if (-opp.result >= result) {
-				point[(x, y)];
+				point = [x, y];
 				result = -opp.result;
 			}
 		}
 	}
+
 	return {
 		point,
 		result: point ? result : 0,

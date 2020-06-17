@@ -1,0 +1,411 @@
+<script>
+  let names = Object.getOwnPropertyNames(window);
+
+  // ECMA 262
+  {
+    let js = new Set();
+    let objects = ["globalThis", "console", "BigInt", "BigInt64Array",
+      "BigUint64Array", "Infinity", "NaN", "undefined", "eval",
+      "isFinite", "isNaN", "parseFloat", "parseInt", "decodeURI",
+      "decodeURIComponent", "encodeURI", "encodeURIComponent",
+      "Array", "Date", "RegExp", "Promise", "Proxy", "Map", "WeakMap",
+      "Set", "WeakSet", "Function", "Boolean", "String", "Number",
+      "Symbol", "Object", "Error", "EvalError", "RangeError",
+      "ReferenceError", "SyntaxError", "TypeError", "URIError",
+      "ArrayBuffer", "SharedArrayBuffer", "DataView", "Float32Array",
+      "Float64Array", "Int8Array", "Int16Array", "Int32Array",
+      "Uint8Array", "Uint16Array", "Uint32Array", "Uint8ClampedArray",
+      "Atomics", "JSON", "Math", "Reflect", "escape", "unescape"
+    ];
+    objects.forEach(o => js.add(o));
+    names = names.filter(e => !js.has(e));
+  }
+
+  // Node
+  {
+    names = names.filter(e => {
+      try {
+        return !(window[e].prototype instanceof Node)
+      } catch (err) {
+        return true;
+      }
+    }).filter(e => e != "Node");
+  }
+
+  // WebRTC 网页即时通信  
+  // https://w3c.github.io/webrtc-pc/#widl-ctor-RTCPeerConnection--RTCConfiguration-configuration
+  {
+    names = names.filter(e => !e.match(/RTC/))
+  }
+
+  // webkit
+  {
+    names = names.filter(e => !e.match(/^webkit/))
+  }
+
+  // oncallback
+  {
+    names = names.filter(e => !e.match(/^on/))
+  }
+
+  // DOM 
+  // https://dom.spec.whatwg.org/
+  {
+    let objects = ["Event", "CustomEvent", "EventTarget", "AbortController",
+      "AbortSignal", "NodeList", "HTMLCollection", "MutationObserver",
+      "MutationRecord", "Node", "Document", "DOMImplementation",
+      "DocumentType", "DocumentFragment", "ShadowRoot", "Element",
+      "NamedNodeMap", "Attr", "CharacterData", "Text", "CDATASection",
+      "ProcessingInstruction", "Comment", "StaticRange", "Range",
+      "NodeIterator", "TreeWalker", "NodeFilter", "DOMTokenList",
+      "XPathResult", "XPathExpression", "XPathEvaluator", "Window",
+      "XMLDocument", "TouchEvent"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Encoding
+  // https://encoding.spec.whatwg.org/
+  {
+    let objects = ["TextDecoder", "TextEncoder", "TextDecoderStream",
+      "TextEncoderStream"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Fetch
+  // https://fetch.spec.whatwg.org/
+  {
+    let objects = ["Headers", "Request", "Response"]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  //http://www.ecma-international.org/ecma-402/5.0/index.html#Title
+  {
+    names = names.filter(e => e != "Intl")
+  }
+
+  // Fullscreen
+  // https://fullscreen.spec.whatwg.org/
+  {
+    let objects = ["Element", "Document"]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // html
+  // https://html.spec.whatwg.org/#window
+  {
+    let objects = ["ApplicationCache", "BarProp", "BeforeUnloadEvent",
+      "BroadcastChannel", "CanvasGradient", "CanvasPattern",
+      "CloseEvent", "CustomElementRegistry", "DOMParser",
+      "DOMStringList", "DOMStringMap", "DataTransfer",
+      "DataTransferItem", "DataTransferItemList", "Document",
+      "DragEvent", "Element", "ElementInternals", "ErrorEvent",
+      "EventSource", "External", "FormDataEvent", "HTMLAllCollection",
+      "HTMLAnchorElement", "HTMLAreaElement", "HTMLAudioElement",
+      "HTMLBRElement", "HTMLBaseElement", "HTMLBodyElement",
+      "HTMLButtonElement", "HTMLCanvasElement", "HTMLDListElement",
+      "HTMLDataElement", "HTMLDataListElement", "HTMLDetailsElement",
+      "HTMLDialogElement", "HTMLDirectoryElement", "HTMLDivElement",
+      "HTMLElement", "HTMLEmbedElement", "HTMLFieldSetElement",
+      "HTMLFontElement", "HTMLFormControlsCollection",
+      "HTMLFormElement", "HTMLFrameElement", "HTMLFrameSetElement",
+      "HTMLHRElement", "HTMLHeadElement", "HTMLHeadingElement",
+      "HTMLHtmlElement", "HTMLIFrameElement", "HTMLImageElement",
+      "HTMLInputElement", "HTMLLIElement", "HTMLLabelElement",
+      "HTMLLegendElement", "HTMLLinkElement", "HTMLMapElement",
+      "HTMLMarqueeElement", "HTMLMediaElement", "HTMLMenuElement",
+      "HTMLMetaElement", "HTMLMeterElement", "HTMLModElement",
+      "HTMLOListElement", "HTMLObjectElement", "HTMLOptGroupElement",
+      "HTMLOptionElement", "HTMLOptionsCollection",
+      "HTMLOutputElement", "HTMLParagraphElement", "HTMLParamElement",
+      "HTMLPictureElement", "HTMLPreElement", "HTMLProgressElement",
+      "HTMLQuoteElement", "HTMLScriptElement", "HTMLSelectElement",
+      "HTMLSlotElement", "HTMLSourceElement", "HTMLSpanElement",
+      "HTMLStyleElement", "HTMLTableCaptionElement",
+      "HTMLTableCellElement", "HTMLTableColElement",
+      "HTMLTableElement", "HTMLTableRowElement",
+      "HTMLTableSectionElement", "HTMLTemplateElement",
+      "HTMLTextAreaElement", "HTMLTimeElement", "HTMLTitleElement",
+      "HTMLTrackElement", "HTMLUListElement", "HTMLUnknownElement",
+      "HTMLVideoElement", "HashChangeEvent", "History", "ImageBitmap",
+      "ImageBitmapRenderingContext", "ImageData", "Location",
+      "MediaError", "MessageChannel", "MessageEvent", "MessagePort",
+      "MimeType", "MimeTypeArray", "Navigator", "OffscreenCanvas",
+      "PageTransitionEvent", "Plugin", "PluginArray", "PopStateEvent",
+      "PromiseRejectionEvent", "RadioNodeList", "SharedWorker",
+      "Storage", "StorageEvent", "SubmitEvent", "TextMetrics",
+      "TextTrack", "TextTrackCue", "TextTrackCueList",
+      "TextTrackList", "TimeRanges", "TrackEvent", "ValidityState",
+      "WebSocket", "Window", "Worker"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // storage
+  // https://storage.spec.whatwg.org/
+  {
+    let objects = ["StorageManager"]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // streams
+  // https://streams.spec.whatwg.org/
+  {
+    let objects = ["ReadableStream", "ReadableStreamDefaultReader",
+      "WritableStream", "WritableStreamDefaultWriter",
+      "TransformStream", "ByteLengthQueuingStrategy",
+      "CountQueuingStrategy"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // url
+  // https://url.spec.whatwg.org/
+  {
+    let objects = ["URL", "URLSearchParams"]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // XMLHttpRequest
+  // https://xhr.spec.whatwg.org/
+  {
+    let objects = ["XMLHttpRequest", "FormData", "ProgressEvent",
+      "XMLHttpRequestEventTarget", "XMLHttpRequestUpload"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // WebGL
+  // https://www.khronos.org/registry/webgl/specs/latest/2.0/#3.6
+  {
+    let objects = ["WebGLQuery", "WebGLUniformLocation", "WebGLTexture",
+      "WebGLShaderPrecisionFormat", "WebGLShader",
+      "WebGLRenderingContext", "WebGLRenderbuffer", "WebGLProgram",
+      "WebGLFramebuffer", "WebGLContextEvent", "WebGLBuffer",
+      "WebGLActiveInfo", "WebGL2RenderingContext", "WebGLSampler",
+      "WebGLSync", "WebGLTransformFeedback", "WebGLVertexArrayObject"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Audio
+  // https://webaudio.github.io/web-audio-api/#the-waveshapernode-interface
+  {
+    let objects = ["BaseAudioContext", "AudioContext",
+      "OfflineAudioContext", "OfflineAudioCompletionEvent",
+      "AudioBuffer", "AudioNode", "AudioParam",
+      "AudioScheduledSourceNode", "AnalyserNode",
+      "AudioBufferSourceNode", "AudioDestinationNode",
+      "AudioListener", "AudioProcessingEvent", "BiquadFilterNode",
+      "ChannelMergerNode", "ChannelSplitterNode",
+      "ConstantSourceNode", "ConvolverNode", "DelayNode",
+      "DynamicsCompressorNode", "GainNode", "IIRFilterNode",
+      "MediaElementAudioSourceNode",
+      "MediaStreamAudioDestinationNode", "MediaStreamAudioSourceNode",
+      "MediaStreamTrackAudioSourceNode", "OscillatorNode",
+      "PannerNode", "PeriodicWave", "ScriptProcessorNode",
+      "StereoPannerNode", "WaveShaperNode", "AudioWorklet",
+      "AudioWorkletGlobalScope", "AudioWorkletNode",
+      "AudioWorkletProcessor"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Audio
+  // https://webaudio.github.io/web-audio-api/#the-waveshapernode-interface
+  {
+    let objects = ["BaseAudioContext", "AudioContext",
+      "OfflineAudioContext", "OfflineAudioCompletionEvent",
+      "AudioBuffer", "AudioNode", "AudioParam",
+      "AudioScheduledSourceNode", "AnalyserNode",
+      "AudioBufferSourceNode", "AudioDestinationNode",
+      "AudioListener", "AudioProcessingEvent", "BiquadFilterNode",
+      "ChannelMergerNode", "ChannelSplitterNode",
+      "ConstantSourceNode", "ConvolverNode", "DelayNode",
+      "DynamicsCompressorNode", "GainNode", "IIRFilterNode",
+      "MediaElementAudioSourceNode",
+      "MediaStreamAudioDestinationNode", "MediaStreamAudioSourceNode",
+      "MediaStreamTrackAudioSourceNode", "OscillatorNode",
+      "PannerNode", "PeriodicWave", "ScriptProcessorNode",
+      "StereoPannerNode", "WaveShaperNode", "AudioWorklet",
+      "AudioWorkletGlobalScope", "AudioWorkletNode",
+      "AudioWorkletProcessor"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // ServiceWorker
+  // https://wicg.github.io/background-sync/spec/#sync-manager-interface
+  {
+    let objects = ["ServiceWorkerRegistration", "SyncManager",
+      "ServiceWorkerGlobalScope", "SyncEvent", "represents",
+      "ServiceWorkerRegistration", "SyncManager",
+      "ServiceWorkerGlobalScope", "SyncEvent"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // SourceBuffer
+  // https://w3c.github.io/media-source/#sourcebufferlist
+  {
+    let objects = ["MediaSource", "SourceBuffer", "SourceBufferList", "URL",
+      "AudioTrack", "VideoTrack", "TextTrack"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // screen
+  // https://w3c.github.io/screen-orientation/#screenorientation-interface
+  {
+    let objects = ["Screen", "ScreenOrientation"]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // svg
+  {
+    let objects = ["SVGUnitTypes", "SVGTransformList", "SVGTransform",
+      "SVGStringList", "SVGRect", "SVGPreserveAspectRatio",
+      "SVGPointList", "SVGPoint", "SVGNumberList", "SVGNumber",
+      "SVGMatrix", "SVGLengthList", "SVGLength",
+      "SVGAnimatedTransformList", "SVGAnimatedString",
+      "SVGAnimatedRect", "SVGAnimatedPreserveAspectRatio",
+      "SVGAnimatedNumberList", "SVGAnimatedNumber",
+      "SVGAnimatedLengthList", "SVGAnimatedLength",
+      "SVGAnimatedInteger", "SVGAnimatedEnumeration",
+      "SVGAnimatedBoolean", "SVGAnimatedAngle", "SVGAngle"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+  // canvas
+  {
+    let objects = ["CanvasRenderingContext2D",
+      "CanvasCaptureMediaStreamTrack"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Geometry
+  // https://drafts.fxtf.org/geometry/#DOMRect
+  {
+    let objects = ["DOMPointReadOnly", "DOMPoint", "DOMRectReadOnly",
+      "DOMRect", "DOMRectList", "DOMQuad", "DOMMatrixReadOnly",
+      "DOMMatrix"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // navigation-timing
+  // https://www.w3.org/TR/navigation-timing/#sec-navigation-timing-interface
+  {
+    let objects = ["PerformanceTiming", "PerformanceServerTiming",
+      "PerformanceResourceTiming", "PerformancePaintTiming",
+      "PerformanceObserverEntryList", "PerformanceObserver",
+      "PerformanceNavigationTiming", "PerformanceMeasure",
+      "PerformanceMark", "PerformanceLongTaskTiming",
+      "PerformanceEventTiming", "PerformanceEntry",
+      "PerformanceElementTiming", "Performance",
+      "PerformanceNavigation"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // media
+  // https://w3c.github.io/mediacapture-main/#dom-mediastreamtrackevent
+  {
+    let objects = ["MediaStreamTrackEvent", "MediaStreamTrack",
+      "MediaStreamEvent", "MediaStream", "MediaSettingsRange",
+      "MediaRecorder", "MediaEncryptedEvent", "MediaCapabilities",
+      "MediaQueryListEvent", "MediaQueryList", "MediaList",
+      "MediaMetadata", "MediaSession", "MediaDeviceInfo",
+      "MediaDevices", "MediaKeyMessageEvent", "MediaKeys",
+      "MediaKeySession", "MediaKeyStatusMap", "MediaKeySystemAccess"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // css
+  // https://drafts.css-houdini.org/css-typed-om-1/#dom-cssvariablereferencevalue-cssvariablereferencevalue
+  {
+    let objects = ["CSSVariableReferenceValue", "CSSUnparsedValue",
+      "CSSUnitValue", "CSSTranslate", "CSSTransformValue",
+      "CSSTransformComponent", "CSSSupportsRule", "CSSStyleValue",
+      "CSSStyleSheet", "CSSStyleRule", "CSSStyleDeclaration",
+      "CSSSkewY", "CSSSkewX", "CSSSkew", "CSSScale", "CSSRuleList",
+      "CSSRule", "CSSRotate", "CSSPositionValue", "CSSPerspective",
+      "CSSPageRule", "CSSNumericValue", "CSSNumericArray",
+      "CSSNamespaceRule", "CSSMediaRule", "CSSMatrixComponent",
+      "CSSMathValue", "CSSMathSum", "CSSMathProduct", "CSSMathNegate",
+      "CSSMathMin", "CSSMathMax", "CSSMathInvert", "CSSKeywordValue",
+      "CSSKeyframesRule", "CSSKeyframeRule", "CSSImportRule",
+      "CSSImageValue", "CSSGroupingRule", "CSSFontFaceRule", "CSS",
+      "CSSConditionRule"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // file
+  // https://w3c.github.io/FileAPI/
+  {
+    let objects = ["FileReader", "FileReaderSync", "Blob", "FileList",
+      "File"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Bluetooth
+  // https://webbluetoothcg.github.io/web-bluetooth/#bluetooth
+  {
+    let objects = ["BluetoothUUID", "Bluetooth",
+      "BluetoothCharacteristicProperties", "BluetoothDevice",
+      "BluetoothRemoteGATTCharacteristic",
+      "BluetoothRemoteGATTDescriptor", "BluetoothRemoteGATTServer",
+      "BluetoothRemoteGATTService"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // MIDI
+  // https://webaudio.github.io/web-midi-api/#midiaccess-interface
+  {
+    let objects = ["MIDIAccess", "MIDIConnectionEvent", "MIDIInput",
+      "MIDIInputMap", "MIDIMessageEvent", "MIDIOutput",
+      "MIDIOutputMap", "MIDIPort"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // USB
+  // https://wicg.github.io/webusb/#enumeration
+  {
+    let objects = ["USB", "USBAlternateInterface", "USBConfiguration",
+      "USBConnectionEvent", "USBDevice", "USBEndpoint",
+      "USBInterface", "USBInTransferResult",
+      "USBIsochronousInTransferPacket",
+      "USBIsochronousInTransferResult",
+      "USBIsochronousOutTransferPacket",
+      "USBIsochronousOutTransferResult", "USBOutTransferResult"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // IDB
+  // https://www.w3.org/TR/IndexedDB/#idbversionchangeevent
+  {
+    let objects = ["IDBVersionChangeEvent", "IDBTransaction", "IDBRequest",
+      "IDBOpenDBRequest", "IDBObjectStore", "IDBKeyRange", "IDBIndex",
+      "IDBFactory", "IDBDatabase", "IDBCursorWithValue", "IDBCursor"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // Trusted
+  {
+    let objects = ["TrustedHTML", "TrustedScript", "TrustedScriptURL",
+      "TrustedTypePolicy", "TrustedTypePolicyFactory"
+    ]
+    names = names.filter(e => !~objects.indexOf(e))
+  }
+
+  // 剩下 256 个 API 分到 other 里
+</script>

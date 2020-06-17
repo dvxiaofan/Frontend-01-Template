@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TicTacToe</title>
+
+  <style>
+    #board {
+      display: inline-block;
+      border: 1px solid #ccc;
+    }
+
+    .cell {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      font-size: 48px;
+      text-align: center;
+      vertical-align: middle;
+      color: #aaa;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      -webkit-user-select: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="board"></div>
+
+  <button id="reset">重置</button>
+  <button id="tip">提示</button>
+
+
+  <script src="ticTacToe.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>path</title>
+  <style>
+    div {
+      width: 900px;
+      line-height: 0;
+      margin: 0;
+    }
+
+    span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin: 0 1px 1px 0;
+      background-color: rgba(0, 120, 0, .3);
+      vertical-align: middle;
+    }
+
+    .active {
+      background-color: rgba(0, 120, 0, 1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <button onclick="localStorage.map = JSON.stringify(map)">save</button>
+  <button onclick="reset()">reset</button>
+  <script>
+    class BinaryHeap {
+      constructor(data, compare) {
+        this.data = data;
+        this.compare = compare;
+      }
+      take() {
+        if (!this.data.length) return;
+        let min = this.data[0];
+        let i = 0;
+
+        while (i < this.data.length) {
+          if (i * 2 + 1 >= this.data.length)
+            break;
+          if (i * 2 + 2 >= this.data.length) {
+            this.data[i] = this.data[i * 2 + 1];
+            i = i * 2 + 1;
+            break;
+          }
+
+          if (this.compare(this.data[i * 2 + 1], this.data[i * 2 + 2]) < 0) {
+            this.data[i] = this.data[i * 2 + 1];
+            i = i * 2 + 1;
+          } else {
+            this.data[i] = this.data[i * 2 + 2];
+            i = i * 2 + 2;
+          }
+        }
+        if (i < this.data.length - 1)
+          this.insertAt(i, this.data.pop());
+        else
+          this.data.pop();
+
+        return min;
+      }
+      insertAt(i, v) {
+        this.data[i] = v;
+        while (i > 0 && this.compare(v, this.data[Math.floor((i - 1) / 2)]) <
+          0) {
+          this.data[i] = this.data[Math.floor((i - 1) / 2)];
+          this.data[Math.floor((i - 1) / 2)] = v;
+          i = Math.floor((i - 1) / 2)
+        }
+      }
+      insert(v) {
+        this.insertAt(this.data.length, v)
+      }
+      get length() {
+        return this.data.length;
+      }
+    }
+
+    var map;
+    let mouse = false
+    let clear = false
+    let con = document.getElementById('container')
+    show()
+
+    function reset() {
+      localStorage.removeItem('map')
+      location.reload()
+    }
+
+    function show() {
+      map = localStorage.map ? JSON.parse(localStorage.map) : Array(10000).fill(
+        0)
+      for (let y = 0; y < 100; y++) {
+        for (let x = 0; x < 100; x++) {
+          let cell = document.createElement('span')
+          if (map[y * 100 + x] === 1) {
+            cell.classList.add('active')
+          }
+          cell.addEventListener('mousemove', () => {
+            if (mouse) {
+              if (clear) {
+                cell.classList.remove('active')
+                map[y * 100 + x] = 0
+              } else {
+                cell.classList.add('active')
+                map[y * 100 + x] = 1
+              }
+            }
+          })
+          con.appendChild(cell)
+        }
+      }
+    }
+    document.addEventListener('mousedown', e => {
+      mouse = true
+      clear = (e.which === 3)
+    })
+    document.addEventListener('mouseup', () => mouse = false)
+    document.addEventListener('contextmenu', e => e.preventDefault())
+
+    function sleep(t) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, t)
+      })
+    }
+    async function findPath(map, start, end) {
+      map = map.slice()
+
+      function distance([x, y]) {
+        return (x - end[0]) ** 2 + (y - end[1]) ** 2;
+      }
+
+      let cllection = new BinaryHeap([start], (a, b) => distance(a) -
+        distance(b));
+
+      con.children[end[1] * 100 + end[0]].style.backgroundColor = 'red'
+      con.children[start[1] * 100 + start[0]].style.backgroundColor =
+        'rgba(255, 255, 59, .7)'
+      map[start[1] * 100 + start[0]] = 2
+
+      async function insert([x, y], pre) {
+        if (map[100 * y + x] !== 0) return;
+        if (x < 0 || y < 0 || x >= 100 || y >= 100) return;
+        map[100 * y + x] = pre;
+        if (!(x === end[0] && y === end[1])) {
+          con.children[y * 100 + x].style.backgroundColor = '#c5cf60'
+        }
+        await sleep(5)
+        cllection.insert([x, y])
+      }
+
+      while (cllection.length) {
+        let [x, y] = cllection.take()
+        if (x === end[0] && y === end[1]) {
+          console.log('end2:', x, y)
+          let path = []
+          while (x !== start[0] || y !== start[1]) {
+            path.push([x, y])
+            if (!((x === start[0] && y === start[1]) || (x === end[0] && y ===
+                end[1]))) {
+              con.children[y * 100 + x].style.backgroundColor = 'blue';
+            }
+            [x, y] = map[y * 100 + x];
+            await sleep(10)
+          }
+          return path
+        }
+        await insert([x - 1, y], [x, y]) // 左
+        await insert([x + 1, y], [x, y]) // 右
+        await insert([x, y - 1], [x, y]) // 上
+        await insert([x, y + 1], [x, y]) // 下
+
+        // await insert([x - 1, y - 1], [x, y]) // 左上
+        // await insert([x + 1, y - 1], [x, y]) // 右上
+        // await insert([x - 1, y + 1], [x, y]) // 左下
+        // await insert([x + 1, y + 1], [x, y]) // 右下
+
+        if (map[y * 100 + x - 1] !== 1 && map[(y - 1) * 100 + x] !== 1) {
+          await insert([x - 1, y - 1], [x, y]) // 左上
+        }
+        if (map[y * 100 + x + 1] !== 1 && map[(y - 1) * 100 + x] !== 1) {
+          await insert([x + 1, y - 1], [x, y]) // 右上
+        }
+        if (map[y * 100 + x - 1] !== 1 && map[(y + 1) * 100 + x] !== 1) {
+          await insert([x - 1, y + 1], [x, y]) // 左下
+        }
+        if (map[y * 100 + x + 1] !== 1 && map[(y + 1) * 100 + x] !== 1) {
+          await insert([x + 1, y + 1], [x, y]) // 右下
+        }
+      }
+      return null
+    }
+  </script>
+</body>
+
+</html>

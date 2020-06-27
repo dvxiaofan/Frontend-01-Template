@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>path</title>
+  <style>
+    div {
+      width: 900px;
+      line-height: 0;
+      margin: 0;
+    }
+
+    span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin: 0 1px 1px 0;
+      background-color: rgba(0, 120, 0, .3);
+      vertical-align: middle;
+    }
+
+    .active {
+      background-color: rgba(0, 120, 0, 1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <button onclick="localStorage.map = JSON.stringify(map)">save</button>
+  <button onclick="reset()">reset</button>
+  <script>
+    var map;
+    let mouse = false
+    let clear = false
+    show()
+
+    function reset() {
+      console.log(111)
+      localStorage.removeItem('map')
+      location.reload()
+    }
+
+    function show() {
+      map = localStorage.map ? JSON.parse(localStorage.map) : Array(10000).fill(
+        0)
+      let con = document.getElementById('container')
+      for (let y = 0; y < 100; y++) {
+        for (let x = 0; x < 100; x++) {
+          let cell = document.createElement('span')
+          if (map[y * 100 + x] === 1) {
+            cell.classList.add('active')
+          }
+          cell.addEventListener('mousemove', () => {
+            if (mouse) {
+              if (clear) {
+                cell.classList.remove('active')
+                map[y * 100 + x] = 0
+              } else {
+                cell.classList.add('active')
+                map[y * 100 + x] = 1
+              }
+            }
+          })
+          con.appendChild(cell)
+        }
+      }
+    }
+    document.addEventListener('mousedown', e => {
+      mouse = true
+      clear = (e.which === 3)
+    })
+    document.addEventListener('mouseup', () => mouse = false)
+    document.addEventListener('contextmenu', e => e.preventDefault())
+  </script>
+</body>
+
+</html>

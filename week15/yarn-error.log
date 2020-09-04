@@ -1,0 +1,49 @@
+Arguments: 
+  /Users/xiaofan/.nvm/versions/node/v10.21.0/bin/node /usr/local/bin/yarn install
+
+PATH: 
+  /Users/xiaofan/.nvm/versions/node/v10.21.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/b‌​:/usr/local/mysql-8.0.13-macos10.14-x86_64/bin
+
+Yarn version: 
+  1.15.2
+
+Node version: 
+  10.21.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/xiaofan/Desktop/devzhang/jk前端训练营/Frontend-01-Template/week15/package.json: Unexpected token } in JSON at position 461
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:304:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:315:13
+
+npm manifest: 
+  {
+    "name": "week15",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.10.4",
+      "@babel/plugin-transform-react-jsx": "^7.10.4",
+      "@babel/preset-env": "^7.10.4",
+      "babel-core": "^6.26.3",
+      "babel-loader": "^8.1.0",
+      "webpack": "^4.43.0",
+      "webpack-cli": "^3.3.12",
+      "webpack-dev-server": "^3.11.0"
+    },
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

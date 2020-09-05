@@ -1,0 +1,31 @@
+Arguments: 
+  /Users/xiaofan/.nvm/versions/node/v10.21.0/bin/node /usr/local/bin/yarn init
+
+PATH: 
+  /Users/xiaofan/.nvm/versions/node/v10.21.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/b‌​:/usr/local/mysql-8.0.13-macos10.14-x86_64/bin
+
+Yarn version: 
+  1.15.2
+
+Node version: 
+  10.21.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/xiaofan/Desktop/devzhang/jk前端训练营/Frontend-01-Template/week17/console-toolkit/package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:304:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:315:13
+
+npm manifest: 
+  
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

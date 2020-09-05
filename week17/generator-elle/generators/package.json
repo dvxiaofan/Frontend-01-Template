@@ -1,0 +1,16 @@
+{
+  "name": "generators",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "app",
+    "router"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^4.12.0"
+  }
+}
